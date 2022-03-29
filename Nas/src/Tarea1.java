@@ -1,10 +1,15 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+ 
 public class Tarea1 {
 
     public static void main(String[] args) {
         char opcion;
+        Pattern pattern = Pattern
+                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
         ArrayList<Contacto> contactos = new ArrayList<Contacto>();
         Scanner sc = new Scanner(System.in);
         do {
@@ -28,8 +33,20 @@ public class Tarea1 {
                         } else {
                             System.out.println("Ingrese su correo (opcional)");
                             String correo = sc.next();
-                            System.out.println("El contacto se ha agregado correctamente");
-                            contactos.add(new Contacto(nombre, telefono, correo));
+                            if (correo == null) {
+                                Contacto contacto = new Contacto(nombre, telefono, correo);
+                                contactos.add(contacto);
+                            } else {
+                                Matcher mather = pattern.matcher(correo);
+                                if (mather.matches()) {
+                                    System.out.println("El contacto se ha agregado correctamente");
+                                    Contacto contacto = new Contacto(nombre, telefono, correo);
+                                    contactos.add(contacto);
+                                } else {
+                                    System.out.println("El correo ingresado no es valido");
+                                }
+                            }
+
                         }
 
                     }
